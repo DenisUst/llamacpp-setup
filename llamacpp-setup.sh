@@ -16,6 +16,11 @@ START_SERVER="${START_SERVER:-false}"  # true = запустить llama-server 
 
 echo "=== llama.cpp setup started: $(date) ==="
 
+# На некоторых образах sudo не подхватывает /etc/profile.d/*, поэтому
+# подстраховываемся явным добавлением CUDA в PATH для этого запуска скрипта.
+export PATH="/usr/local/cuda/bin:${PATH}"
+export LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}"
+
 check_root() {
     if [[ $EUID -ne 0 ]]; then
         echo "Запусти скрипт от root (sudo)."
